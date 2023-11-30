@@ -1,0 +1,5 @@
+0. 1. :: xdeb, xfin
+100 :: Ns (nombre de cellules)
+0.5 :: CFL
+0.4 :: Tfin
+0.5 :: vitesse de transport v

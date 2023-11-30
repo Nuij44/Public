@@ -1,0 +1,17 @@
+exe : main.o outil.o solex.o coefficients.o frontiere.o
+	gcc -O2 main.o outil.o solex.o coefficients.o frontiere.o
+
+outil.o : outil.c
+	gcc -c outil.c
+
+solex.o : solex.c
+	gcc -c solex.c
+
+coefficients.o : coefficients.c outil.h solex.h
+	gcc -c coefficients.c
+
+frontiere.o : frontiere.c outil.h coefficients.h solex.h
+	gcc -c frontiere.c
+
+main.o : main.c outil.h coefficients.h solex.h frontiere.h
+	gcc -c main.c
