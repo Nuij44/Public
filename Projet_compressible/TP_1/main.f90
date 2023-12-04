@@ -23,7 +23,7 @@ allocate(F(1:Ns - 1))
 
 !On initialise U
 call initialisation(U,xdeb,xfin,NS)
-
+call sauvegarde_init(U,Ns,xdeb,xfin)
 !on sauvegarde la solution exacte
 call solex(Ns,xdeb,xfin, Tfin, a)
 
@@ -55,9 +55,12 @@ DO WHILE (date < Tfin)
 	!Unext(Ns) = U(Ns)
 	
 	!Neumann
-	Unext(1) = Unext(2)
-	Unext(Ns) = Unext(Ns - 1)
+	!Unext(1) = Unext(2)
+	!Unext(Ns) = Unext(Ns - 1)
 	
+	!periodique
+	Unext(1) = u(1) - (dt/dx)*(F(1) - F(Ns-1))
+	Unext(Ns) = U(1)
 	!Mise à jour
 	DO i = 1, Ns
 		U(i) = Unext(i)
@@ -121,6 +124,21 @@ do i = 1,Ns
 end do
  close(50)
 end subroutine sauvegarde
+
+
+subroutine sauvegarde_init(U,Ns,xdeb,xfin)
+INTEGER, PARAMETER :: rp = REAL64
+INTEGER :: Ns, i
+REAL(rp), DIMENSION(Ns) :: u
+REAL(rp) :: xdeb, xfin, x
+	
+open(unit=50,file='result_deb.txt')
+do i = 1,Ns
+	x = xdeb + i*(xfin - xdeb)/Ns
+	write(50,*) x, U(i)
+end do
+close(50)
+end subroutine sauvegarde_init
 
 subroutine solex(Ns,xdeb,xfin, Tfin, v)
 INTEGER, PARAMETER :: rp = REAL64
